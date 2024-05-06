@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewData["Title"] = "Changes";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Use this page to detail your site's privacy policy.</p>
+
+@if (ViewBag.UserRole == "Administrator" || ViewBag.UserRole == "Manager")
+{
+    <form asp-controller="Project" asp-action="AllProject" method="get">
+        <div class="offset-sm-4 col-sm-4 d-grid">
+            <button type="submit" class="btn btn-primary">Check changes our team</button>
+        </div>
+    </form>
+}
+else
+{
+    <form asp-controller="Project" asp-action="SprintsForLoginUsers" method="get">
+        <div class="offset-sm-4 col-sm-4 d-grid">
+            <button type="submit" class="btn btn-primary">Chek your plan</button>
+        </div>
+    </form>
+}

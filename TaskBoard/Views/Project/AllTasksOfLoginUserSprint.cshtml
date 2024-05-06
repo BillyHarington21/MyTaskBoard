@@ -1,0 +1,81 @@
+﻿@using TaskBoard.ViewModels
+@model List<TaskWorkVM> // Предполагается, что модель представления - это список задач спринта
+
+@{
+    ViewData["Title"] = "Tasks of Sprint";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Add File</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var task in Model)
+            {
+                <tr>
+                    <td>@task.Name</td>
+                    <td>@task.Description</td>
+                    <td>
+                        <input type="hidden" name="TaskId" value="@task.Id" />
+                            <input type="hidden" name="SprintId" value="@task.SprintId" />
+                            <div class="form-group">
+                                <label for="status">Status:</label>
+                                <select class="form-control" id="status" name="status">
+                                    @if (task.IsCompleted == TaskWorkVM.TaskStatus.NotStarted)
+                                    {
+                                        <option value="0" selected>Not Started</option>
+                                        <option value="1">In Progress</option>
+                                        <option value="2">Completed</option>
+                                    }
+                                    else if (task.IsCompleted == TaskWorkVM.TaskStatus.InProgress)
+                                    {
+                                        <option value="0">Not Started</option>
+                                        <option value="1" selected>In Progress</option>
+                                        <option value="2">Completed</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="0">Not Started</option>
+                                        <option value="1">In Progress</option>
+                                        <option value="2" selected>Completed</option>
+                                    }
+                                </select>
+                            </div>                       
+                    </td>
+                    <td>                        
+                        <input type="hidden" name="TaskId" value="@task.Id" />
+                        <input type="hidden" name="description" value="@task.Description" />
+                        <input type="hidden" name="SprintId" value="@task.SprintId" />
+                        <div class="form-group">
+                            <label for="file">Choose file:</label>
+                            
+                        </div>                       
+                        @if (task.Files != null && task.Files.Any())
+                        {
+                            <h4>Uploaded Files:</h4>
+                            <ul>
+                                @foreach (var file in task.Files)
+                                {
+                                    <li>@file.FileName</li>
+                                }
+                            </ul>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No tasks found for this sprint.</p>
+}

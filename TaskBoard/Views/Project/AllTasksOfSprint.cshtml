@@ -1,0 +1,104 @@
+﻿@using TaskBoard.ViewModels
+@model IEnumerable<TaskWorkVM>
+@{
+    ViewData["Title"] = "All tasks";
+}
+<h2 class="text-cemter mb-5">List Tasks of </h2>
+
+<div class="row mb-5">
+    
+    <div class="col">
+        <a asp-controller="Project" asp-action="CreatTask" asp-route-sprintId="@ViewBag.sprintId" class="btn btn-primary">Create Task</a>
+    </div>
+    <div class="col">
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <p>NotFound</p>
+
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Is Completed</th>
+                <th>Add File</th>                
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var task in Model)
+            {
+                <tr>
+                    <td>@task.Name</td>
+                    <td>@task.Description</td>
+                    <td>
+                        <form method="post" asp-action="UpdateTaskStatus">
+                            <input type="hidden" name="TaskId" value="@task.Id" />
+                            <input type="hidden" name="SprintId" value="@task.SprintId" />
+                            <div class="form-group">
+                                <label for="status">Status:</label>
+                                <select class="form-control" id="status" name="status">
+                                    @if (task.IsCompleted == TaskWorkVM.TaskStatus.NotStarted)
+                                    {
+                                        <option value="0"  selected>Not Started</option>
+                                        <option value="1">In Progress</option>
+                                        <option value="2">Completed</option>
+                                    }
+                                    else if (task.IsCompleted == TaskWorkVM.TaskStatus.InProgress )
+                                    {
+                                        <option value="0">Not Started</option>
+                                        <option value="1" selected>In Progress</option>
+                                        <option value="2">Completed</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="0">Not Started</option>
+                                        <option value="1">In Progress</option>
+                                        <option value="2" selected>Completed</option>
+                                    }
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary" asp-action="UpdateTaskStatus">Save</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" enctype="multipart/form-data" asp-action="UploadFile" asp-route-taskId="@task.Id">
+                            <input type="hidden" name="TaskId" value="@task.Id" />
+                            <input type="hidden" name="description" value="@task.Description" />
+                            <input type="hidden" name="SprintId" value="@task.SprintId" />
+                            <div class="form-group">
+                                <label for="file">Choose file:</label>
+                                <input type="file" name="file" multiple />
+                            </div>
+                            <button type="submit" class="btn btn-primary" asp-action="UploadFile">Upload</button>
+                        </form>
+                        @if (task.Files != null && task.Files.Any())
+                        {
+                            <h4>Uploaded Files:</h4>
+                            <ul>
+                                @foreach (var file in task.Files)
+                                {
+                                    <li>@file.FileName</li>
+                                }
+                            </ul>
+                        }
+                    </td>
+                    <td>
+                        <form asp-action="DeleteTasks" asp-controller="Project" method="post">
+                            <input type="hidden" name="TaskId" value="@task.Id"/>
+                            <input type="hidden" name="SprintId" value="@task.SprintId" />
+                            <button type="submit" class="btn btn-danger" asp-action="DeleteTasks">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+

@@ -1,0 +1,59 @@
+﻿@using TaskBoard.ViewModels
+@model IEnumerable<ProjectVM> 
+@{
+    ViewData["Title"] = "Your Projects";
+}
+<h2 class="text-cemter mb-5">List of Projects</h2>
+
+<div class="row mb-5">
+    <div class="col">
+        <a asp-controller="Project" asp-action="Create" class="btn btn-primary">Create Project</a>
+    </div>
+    <div class="col">
+    </div>
+</div>
+
+
+@if (!Model.Any())
+{
+    <p>NotFound</p>
+
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+            </tr>
+        <th></th>
+        </thead>
+        <tbody>
+            @foreach (var project in Model)
+            {
+                <tr>
+                    <td>
+                        <div>@project.Name</div>
+                        <div>
+                            <a asp-action="AllSprintsOfProjects" asp-controller="Project" asp-route-projectName="@project.Name" style="color: #007bff; text-decoration: none; font-size: smaller;">Sprints of this project</a>
+                        </div>
+                    
+                    </td>
+                    <td>@project.Description</td>
+                    <td>
+                        <form asp-action="Delete" method="post">
+                            <input type="hidden" name="Name" value="@project.Name" />
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form asp-action="CreateSp" asp-controller="Project" method="post">
+                            <button type="submit" class="btn btn-primary">+Sprint</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

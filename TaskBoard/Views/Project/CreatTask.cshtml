@@ -1,0 +1,31 @@
+﻿@using TaskBoard.ViewModels
+@model TaskWorkVM
+@{
+    ViewData["Title"] = "Create Task";
+}
+<div>
+    <h2 class="text-center mb-5">Create New Task</h2>
+</div>
+
+
+<form asp-action="CreatTask" asp-controller="Project" method="post">
+    <input type="hidden" name="sprintId" value="@Model.SprintId" />
+    <input type="hidden" name="sprintId" value="@Model.Files" />
+    <div class="row mb-3">
+        <label class="col-sm-4 col-forn-label">Name new task</label>
+        <div class="col-sm-8">
+            <input class="form-control" asp-for="Name" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-4 col-forn-label">Description new task</label>
+        <div class="col-sm-8">
+            <input class="form-control" asp-for="Description" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="offset-sm-4 col-sm-4 d-grid">
+        <button type="submit" class="btn btn-primary" asp-controller="Project" asp-action="CreatTask">Create</button>
+    </div>
+</form>

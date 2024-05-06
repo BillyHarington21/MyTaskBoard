@@ -1,0 +1,47 @@
+﻿@using TaskBoard.ViewModels
+@model List<SprintVM> // Предполагается, что модель представления - это список спринтов
+
+@{
+    ViewData["Title"] = "Your Sprints";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sprint in Model)
+            {
+                <tr>
+                    
+                    <td>
+                        <div>@sprint.Name</div>
+                        <div>
+                            <a asp-action="AllTasksOfLoginUserSprint" asp-controller="Project" asp-route-sprintId="@sprint.Id" style="color: #007bff; text-decoration: none; font-size: smaller;">Tasks of this sprint</a>
+                        </div>
+
+                    </td>
+                    <td>@sprint.Description</td>
+                    <td>@sprint.StartDate.ToShortDateString()</td>
+                    <td>@sprint.EndDate.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No sprints found for the current user.</p>
+}
+
+
+

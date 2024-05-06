@@ -1,0 +1,81 @@
+﻿@using TaskBoard.ViewModels;
+@model List<AppUserVM>
+@{
+    ViewData["Title"] = "All Users";
+}
+<h2>All Users</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Add Role</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Name</td>
+                <td>@user.Email</td>
+                <td>
+                    <form method="post" asp-action="AddRole">
+                        <input type="hidden" name="UserName" value="@user.Name" />
+                        <div class="form-group">
+                            <label for="role">Role:</label>
+                            <select class="form-control" id="role" name="role">
+                                @if (user.Role == AppUserVM.UserRole.Administrator)
+                                {
+                                    <option value="Administrator" selected>Administrator</option>
+                                    <option value="Manager">Manager</option>
+                                    <option value="User">User</option>
+                                }
+                                else if (user.Role == AppUserVM.UserRole.Manager)
+                                {
+                                    <option value="Administrator">Administrator</option>
+                                    <option value="Manager" selected>Manager</option>
+                                    <option value="User">User</option>
+                                }
+                                else
+                                {
+                                    <option value="Administrator">Administrator</option>
+                                    <option value="Manager">Manager</option>
+                                    <option value="User" selected>User</option>
+                                }
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </td>
+                <td>
+                <td>
+                    <form method="post" asp-action="ToggleBlockUser">
+                        <input type="hidden" name="UserName" value="@user.Name" />
+                        <div class="form-check">
+                            <label for="isBlocked">Block:</label>
+                            <select class="form-control" id="isBlocked" name="isBlocked">
+                                    @if (user.IsBlocked == true)
+                                    {
+                                    <option value="true" selected>Block</option>
+                                    <option value="false">Anblock</option>
+                                    }
+                                    else
+                                    {
+                                    <option value="true">Block</option>
+                                    <option value="false" selected>Anblock</option>
+                                    }
+                            </select>
+
+                        </div>
+                        <button type="submit" class="btn btn-danger">Change</button>
+                    </form>
+                </td>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

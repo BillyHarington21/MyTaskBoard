@@ -1,0 +1,73 @@
+﻿@using TaskBoard.ViewModels
+@model IEnumerable<SprintVM>
+@{
+    ViewData["Title"] = "All sprints";
+}
+<h2 class="text-cemter mb-5">List sprints of @ViewBag.ProjectName</h2>
+ 
+@if (!Model.Any())
+{
+    <p>NotFound</p>
+
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Start date</th>
+                <th>End date</th>
+                <td>Add User</td>
+                <td>Id</td>
+            </tr>
+        </thead>
+        
+        <tbody>
+            @foreach (var sprint in Model)
+            {
+                <tr>
+                    <td>
+                        <div>@sprint.Name</div>
+                        <div>
+                            <a asp-action="AllTasksOfSprint" asp-controller="Project" asp-route-sprintId="@sprint.Id" style="color: #007bff; text-decoration: none; font-size: smaller;">Tasks of this sprint</a>
+                        </div>
+
+                    </td> 
+                    <td>@sprint.Description</td>
+                    <td>@sprint.StartDate</td>
+                    <td>@sprint.EndDate</td>
+                    <td>@sprint.Id</td>
+                    <td>
+                        <form asp-controller="Project" asp-action="AllSprintsOfProjects" method="post">
+                            <input type="hidden" name="sprintId" value="@sprint.Id" />
+                            <input type="hidden" name="ProjectName" value="@sprint.ProjectName" asp-for="@sprint.ProjectName" />
+                            <div class="form-group">
+                                <label for="userId">Select User:</label>
+                                <select class="form-control" value="userName" name="userName">
+                                    @foreach (var userName in ViewBag.UserList)
+                                    {
+                                        <option value="@userName" selected>@userName</option>
+                                    }
+                                </select>
+                            </div> 
+                            <button type="submit" class="btn btn-primary">Add User</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form asp-action="DeleteSprints" asp-controller="Project" method="post">
+                            <input type="hidden" name="SprintId" value="@sprint.Id" asp-for="@sprint.Id" />
+                            <input type="hidden" name="ProjectName" value="@sprint.ProjectName" asp-for="@sprint.ProjectName" />
+                            <button type="submit" class="btn btn-danger" asp-action="DeleteSprints">Delete</button>
+                        </form>
+                    </td>
+                    
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+
