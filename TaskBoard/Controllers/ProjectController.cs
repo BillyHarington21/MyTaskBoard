@@ -150,8 +150,10 @@ namespace TaskBoard.Controllers
         {
             
             var tasks = _taskService.GetAllTasksOfSprints(sprintId);
-            ViewBag.SprintId = sprintId;
-           
+            var sprint = _appDbContext.Sprints.FirstOrDefault(s => s.Id == sprintId);
+            var SprintName = sprint.Name;
+            ViewBag.sprintId = sprintId;
+            ViewBag.sprintname = SprintName;
             return View(tasks);
         }
         [HttpPost]
